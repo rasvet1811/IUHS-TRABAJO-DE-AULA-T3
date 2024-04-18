@@ -1,25 +1,139 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.9.34728.123
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsApp2", "WinFormsApp2\WinFormsApp2.csproj", "{E5E81CDE-9BEA-4ADF-B8FD-578A2291F578}"
-EndProject
-Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E5E81CDE-9BEA-4ADF-B8FD-578A2291F578}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E5E81CDE-9BEA-4ADF-B8FD-578A2291F578}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E5E81CDE-9BEA-4ADF-B8FD-578A2291F578}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E5E81CDE-9BEA-4ADF-B8FD-578A2291F578}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {09C21796-AC0F-42AD-B9ED-697E0C7855B9}
-	EndGlobalSection
-EndGlobal
+namespace WinFormsApp2
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Abrir_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog Dialog = new OpenFileDialog();
+            Dialog.Multiselect = true;
+            Dialog.Filter = "All Media Files (*.mp3;*.m4a;*.wav)|*.mp3;*.m4a;*.wav|Audio MP3(*.mp3)|*.mp3|Audio M4A (*.m4a)|*.m4a|Audio WAV (*.wav)|*.wav|All File(*.*)|*.*";//Archivo que maneja y poder seleccionar la cantidad que queramos ; 
+            Dialog.Title = "Selecciona uno o varios archivos de audio";
+            if (Dialog.ShowDialog() == DialogResult.OK)
+            {
+                string Titulo = Dialog.SafeFileName;
+                Nomcam.Text = Titulo;
+                AbrirMedia(Dialog.FileName);
+            }
+        }
+
+        private void AbrirMedia(string ruta)
+        {
+            try
+            {
+                MediaPlayer.URL = @"" + ruta;
+                timer1.Start();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private void Salir_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        public void ProgreTrackbar()
+        {
+            if (MediaPlayer.playState == WMPLib.WMPPlayState.wmppsPlaying)
+            {
+                ADuración.Maximum = (int)MediaPlayer.Ctlcontrols.currentItem.duration;
+                timer1.Start();
+            }
+            else if (MediaPlayer.playState == WMPLib.WMPPlayState.wmppsPaused)
+            {
+                timer1.Stop();
+            }
+            else if (MediaPlayer.playState == WMPLib.WMPPlayState.wmppsStopped)
+            {
+                timer1.Stop();
+                ADuración.Value = 0;
+            }
+        }
+
+        private void trackBar2_ValueChanged(object sender, EventArgs e)
+        {
+            MediaPlayer.settings.volume = Modvol.Value;
+            pvol.Text = Modvol.Value.ToString();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            ProgreTrackbar();
+            ADuración.Value = (int)MediaPlayer.Ctlcontrols.currentPosition;
+            Modvol.Value = MediaPlayer.settings.volume;
+            duracion.Text = MediaPlayer.currentMedia.durationString;
+            progeso.Text = MediaPlayer.Ctlcontrols.currentPositionString;
+        }
+
+        private void Duración_ValueChanged(object sender, EventArgs e)
+        {
+            if (ADuración.Value != (int)MediaPlayer.Ctlcontrols.currentPosition)
+            {
+                MediaPlayer.Ctlcontrols.currentPosition = ADuración.Value;
+            }
+        }
+
+        private void iniypaus_Click(object sender, EventArgs e)
+        {
+            if (iniypaus.Text == ";")
+            {
+                MediaPlayer.Ctlcontrols.pause();
+                iniypaus.Text = "4";
+                timer1.Stop();
+            }
+            else if (iniypaus.Text == "4")
+            {
+                MediaPlayer.Ctlcontrols.play();
+                iniypaus.Text = ";";
+                timer1.Start();
+            }
+        }
+
+        private void elimi_Click(object sender, EventArgs e)
+        {
+            MediaPlayer.Ctlcontrols.stop();
+            iniypaus.Text = "4";
+            progeso.Text = "00:00";
+            ADuración.Value = 0;
+            timer1.Stop();
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        int posy = 0, posx = 0;
+        private void panelcontolbox_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Left)
+            {
+                posx = e.X;
+                posy = e.Y;
+            }
+            else
+            {
+                Left = Left + (e.X - posx);//Distancia de izquierda a derecha
+                Top = Top + (e.Y - posy);//Distancia de Arriba y abajo 
+            }
+        }
+
+        private void minimizar_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+    }
+}

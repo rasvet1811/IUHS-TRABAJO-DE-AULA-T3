@@ -1,25 +1,73 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.9.34728.123
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsApp1", "WinFormsApp1\WinFormsApp1.csproj", "{016E7B0C-C81A-438D-AF0B-7884C8ECCB47}"
-EndProject
-Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{016E7B0C-C81A-438D-AF0B-7884C8ECCB47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{016E7B0C-C81A-438D-AF0B-7884C8ECCB47}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{016E7B0C-C81A-438D-AF0B-7884C8ECCB47}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{016E7B0C-C81A-438D-AF0B-7884C8ECCB47}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {A390543E-A7BC-4496-B6A4-A60722A7C7DD}
-	EndGlobalSection
-EndGlobal
+using AxWMPLib;
+
+namespace WinFormsApp1
+{
+    public partial class Form1 : Form
+    {
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Multiselect = true;//Selecciona varias canciones al mismo tiempo y poder tener una lista pa cambiar las canciones 
+            dialog.Filter = "All Media Files (*.mp3;*.m4a;*.wav)|*.mp3;*.m4a;*.wav|Audio MP3(*.mp3)|*.mp3|Audio M4A (*.m4a)|*.m4a|Audio WAV (*.wav)|*.wav|All File(*.*)|*.*";//Archivo que maneja y poder seleccionar la cantidad que queramos 
+            dialog.Title = "Selecciona uno o varios archivos";
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                string titulo = dialog.SafeFileName;
+                Nomcan.Text = titulo;
+                AbrirMedia(dialog.FileName);
+            }
+
+        }
+        private void AbrirMedia(string ruta)//Va a la ruta de las canciones 
+        {
+            try
+            {
+                player.URL = @"" + ruta;
+                player.Ctlcontrols.play();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al abrir el archivo de medios: " + ex.Message);
+            }
+        }
+
+        private void axWindowsMediaPlayer2_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)//Es el + que lo cierra mientras descubrimos como hacer que cierre con la x 
+        {
+            Application.Exit();
+        }
+
+        public void progreso()
+        {
+            if (player.playState == WMPLib.WMPPlayState.wmppsPlaying)
+            {
+
+            }
+        }
+
+        private void Nomcan_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void play_Click(object sender, EventArgs e)
+        {
+            
+        }
+    }
+}

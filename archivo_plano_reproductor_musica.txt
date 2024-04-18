@@ -16,6 +16,8 @@ Desarrollo de escritorio.NET
 en el archivo Avance30%.sln el codigo de lo que tenemos hasta ahora
 
 *A TENER EN CUENTA: no utilizamos inteligencia artificial pero nos apoyamos de guias en youtube
+-En las ramas hay una llamada intentos fallidos, ahí estan los intentos que no funcionaron 
+-Para poder ver el vídeo hay que darle al view raw
 
 *LINKS DE INVESTIGACIÓN* 
 

@@ -1,0 +1,71 @@
+Equipo:Nodos Simples
+
+*INSTRUCCIONES*
+-El programa fue echo en Visual Studio
+-El idioma usado fue C#
+-No se tuvo que descargar librería 
+-El Visual Studio se tuvo que actualizar con: Desarrollo de escritorio.NET
+ Herramientas de desarrollo.NET framework 4.6.2-4.7.1
+ paquete de compatibilidad de biblioteca 
+ MSIX packaging tools
+ plantillas de C# del SDK de aplicaciones para Windows 
+ Herramientas de desarrollo.NET framework 4.8.1
+ preEmptive protection-dotfuscator 
+
+*A TENER ENCUENTA*
+-El código finalizado se encuentra en la rama que se llama final 
+-Los códigos de prueba (Que no funcionaron) se encuentran en la rama intentos fallidos
+-Por medio de la guía de YouTube, la IA y nuestra lógica, se logro implementar la mayoría de los temas vistos en clase 
+
+*LINKS DE INVESTIGACIÓN* 
+
+https://www.youtube.com/watch?v=VOgLd72DOow&t=1197s
+https://www.youtube.com/watch?v=_JSgPgIyLro
+
+*RUDICAS*
+-De Inteligencia artificial solo usamos ChatGpt algunas de las preguntas fueron con base a los códigos prueba o errores normales, en algunos casos nos presento códigos. Para que el documento no sea difícil de comprender solamente colocaremos las explicaciones textuales (sin código), en caso tal de que se quiera saber que tipo de soluciones codificadas nos dio esta inteligencia, invitamos a la persona a que siga las ruditas y varié entre los códigos fallidos 
+
+preguntas:
+
+-Puede utilizar una lista enlazada individualmente para almacenar la lista de canciones en la lista de reproducción
+- Cada nodo de la lista puede representar una canción y contener información como el nombre de la canción, el nombre del artista y la ruta del archivo
+-Se puede utilizar una lista doblemente enlazada si necesita admitir operaciones como eliminar una canción del medio de la lista de reproducción. en c#
+-Tengo un error en esta parte del código en c# el cual cada que coloco una letra en la barra de texto me sale una ventana de error, ayúdame a solucionarlo R/= Este código está diseñado para manejar cambios en un cuadro de texto que se utiliza para buscar canciones. La idea general es que cuando el texto en el cuadro de búsqueda cambia, se filtran las canciones que coinciden con el término de búsqueda y se actualiza la lista de canciones en el reproductor.
+El problema parece estar en la sección de manejo de excepciones. Actualmente, estás capturando cualquier excepción que ocurra dentro del bloque try, incluyendo las excepciones que no deberían detener la ejecución del programa. Además, el mensaje de la ventana de error parece ser incorrecto y no relacionado con el verdadero propósito de la operación.
+Si quieres manejar errores específicos y proporcionar un mensaje relevante, podrías cambiar el manejo de excepciones para algo como esto
+-me sigue saliendo el error cada que intento egresar una letra : R/=l código que proporcionaste parece estar bien estructurado, y la función textobusqueda_TextChanged debería funcionar correctamente para filtrar las canciones basadas en el término de búsqueda ingresado en textobusqueda. Sin embargo, hay una parte en el código que parece estar incompleta y podría estar causando el problema que mencionas.
+El problema principal es que estás utilizando la variable paths en la línea donde filtras las canciones
+Para solucionar este problema, necesitas asegurarte de que paths contenga la lista de todas las rutas de las canciones disponibles. Esto podría hacerse inicializando y asignando valores a paths en algún lugar del código, como en el constructor o en algún otro método de inicialización.
+-Como podemos implementar los nodos,colas,pilas,listas ligadas, arboles,grafos y hasmap en un mp3: Puede utilizar varias estructuras de datos para implementar diferentes funciones de una aplicación de reproductor multimedia. Aquí hay unos ejemplos:
+
+Listas simples y doblemente enlazadas: Puede utilizar una lista enlazada individualmente para almacenar la lista de canciones en la lista de reproducción. Cada nodo de la lista puede representar una canción y contener información como el nombre de la canción, el nombre del artista y la ruta del archivo. Se puede utilizar una lista doblemente enlazada si necesita admitir operaciones como eliminar una canción del medio de la lista de reproducción.
+Nodos: puede utilizar una estructura de datos de árbol para organizar las canciones de la lista de reproducción por artista, álbum o género. Cada nodo del árbol puede representar una categoría (por ejemplo, artista) y contener una lista de nodos secundarios (por ejemplo, álbumes del artista).
+Hashmap: puede utilizar un mapa hash para buscar rápidamente una canción por su nombre o nombre de artista. El hashmap puede asignar nombres de canciones o nombres de artistas a nodos en la lista de reproducción.
+Árboles: puede utilizar un árbol de búsqueda binaria para almacenar la lista de canciones en la lista de reproducción y admitir búsquedas y clasificaciones rápidas. Cada nodo del árbol puede representar una canción y contener información como el nombre de la canción, el nombre del artista y la ruta del archivo.
+Grafos: puede utilizar una estructura de datos gráfica para representar las relaciones entre canciones, artistas, álbumes y géneros. Cada nodo del gráfico puede representar una entidad (por ejemplo, una canción) y contener información como el nombre de la entidad, la ruta del archivo y los metadatos. Los bordes del gráfico pueden representar relaciones entre entidades (por ejemplo, una canción pertenece a un álbum, un álbum pertenece a un artista).
+Colas y pilas: puede utilizar una estructura de datos de cola para implementar la función "repetir uno". La cola puede almacenar la lista de canciones de la lista de reproducción y la canción que se está reproduciendo actualmente. Cuando termine de reproducirse la canción actual, se podrá reproducir la siguiente canción de la cola. Puede utilizar una estructura de datos de pila para implementar la función "aleatoria". La pila puede almacenar la lista de canciones de la lista de reproducción y la canción que se está reproduciendo actualmente. Cuando la canción actual termina de reproducirse, se puede reproducir una canción aleatoria de la pila.
+A continuación se muestran algunos ejemplos de cómo puede utilizar estas estructuras de datos en una aplicación de reproductor multimedia:
+
+Reproducir, adelantar, atrasar: Puede utilizar una lista enlazada individualmente o una matriz para almacenar la lista de canciones en la lista de reproducción. La canción que se está reproduciendo actualmente se puede representar mediante un puntero o un índice. Para reproducir la canción anterior o siguiente, puede incrementar o disminuir el puntero o índice.
+Agregar: Puede usar una lista enlazada individualmente o una matriz para almacenar la lista de canciones en la lista de reproducción. Para agregar una nueva canción, puede crear un nuevo nodo o insertar un nuevo elemento al final de la lista o matriz.
+Poner en aleatorio: Puedes usar una pila o un hashmap para seleccionar aleatoriamente una canción de la lista de reproducción.
+Eliminar: Puede utilizar una lista enlazada individualmente o una lista doblemente enlazada para eliminar una canción de la lista de reproducción.
+Repetir una vez: puede utilizar una cola para almacenar la lista de canciones en la lista de reproducción y la canción que se está reproduciendo actualmente. Cuando termine de reproducirse la canción actual, se podrá reproducir la siguiente canción de la cola.
+Mostrar el nombre de canciones e imágenes: Puede utilizar un mapa hash para buscar rápidamente el nombre y los metadatos de una canción por su ruta de archivo. Puedes utilizar un árbol o un gráfico para organizar las canciones por artista, álbum o género.
+Reproducir vídeos: Puede utilizar un control de reproductor de vídeo (por ejemplo, MediaElemento MediaPlayerElement) para reproducir archivos de vídeo. Puede utilizar un mapa hash para buscar rápidamente la ruta del archivo de un vídeo por su nombre o metadatos.
+Estos son sólo algunos ejemplos de cómo se pueden utilizar varias estructuras de datos para implementar diferentes funciones de una aplicación de reproductor multimedia. Las estructuras de datos y algoritmos específicos que elija dependerán de los requisitos y limitaciones de su aplicación.
+-Como pueden implementarse la estructura de datos en un mp3, resumido: Colas (Queues):
+Las colas se utilizan para administrar la cola de reproducción.
+Cuando se agrega una canción a la cola, se coloca al final, y la siguiente canción a reproducir se toma del frente de la cola.
+Árboles (para búsqueda de metadatos):
+Los árboles pueden utilizarse para organizar y buscar metadatos de canciones.
+Por ejemplo, un árbol de búsqueda binaria podría indexar canciones por título o artista.
+Estructuras de datos para metadatos:
+Los metadatos (como el título de la canción, el artista, el álbum, etc.) se almacenan generalmente en estructuras de datos específicas.
+Las tablas hash, los diccionarios o las bases de datos pueden utilizarse para asociar metadatos con archivos MP3.
+Pilas (para funciones de deshacer/rehacer):
+Las pilas pueden utilizarse para implementar funciones de deshacer/rehacer en un reproductor MP3.
+Por ejemplo, cuando el usuario agrega o elimina una canción de la lista de reproducción, se puede agregar o quitar de la pila.
+
+*PROBLEMAS*
+-Nos dimos cuenta que a la hora de trabajar con un MP3 hay muchas de los temas que son muy difíciles de implementar, eso varía según de lo que uno quiera y como lo quiera, pasamos por muchas manera de como desarrollar el mp3 que nos cogió un poco la noche, pero al final se logro

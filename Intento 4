@@ -1,0 +1,349 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace MP3
+{
+    public partial class Form1 : Form
+    {
+        private Queue<string> songQueue;
+        private List<string> paths;
+        private List<string> files;
+        private Dictionary<string, string> songDictionary;
+        private string lastPlayedSongPath;
+        private bool isRepeating;
+
+        public Form1()
+        {
+            InitializeComponent();
+            track_Volume.Value = 50;
+            lblVolu.Text = "50%";
+            songQueue = new Queue<string>();
+            songDictionary = new Dictionary<string, string>(); // Inicializar el diccionario
+        }
+
+        private void TrackList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string selectedSongName = TrackList.SelectedItem?.ToString();
+            if (!string.IsNullOrEmpty(selectedSongName) && songDictionary.ContainsKey(selectedSongName))
+            {
+                string selectedSongPath = songDictionary[selectedSongName];
+                PlaySong(selectedSongPath);
+            }
+
+        }
+
+        private void PlaySong(string path)
+        {
+            if (!string.IsNullOrEmpty(path))
+            {
+                lastPlayedSongPath = path; // Guarda la ruta de la última canción reproducia
+                Player.URL = path;
+                Player.Ctlcontrols.play();
+            }
+            else
+            {
+                MessageBox.Show("La ruta de la canción está vacía o es nula.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+            Player.Ctlcontrols.stop();
+        }
+
+        private void btnPause_Click(object sender, EventArgs e)
+        {
+            Player.Ctlcontrols.pause();
+        }
+
+        private void bntPlay_Click(object sender, EventArgs e)
+        {
+            Player.Ctlcontrols.play();
+        }
+
+        private void btnNext_Click(object sender, EventArgs e)
+        {
+            if (songQueue.Count > 0)
+            {
+                PlaySong(songQueue.Dequeue());
+            }
+            else if (TrackList.SelectedIndex < TrackList.Items.Count - 1)
+            {
+                TrackList.SelectedIndex = TrackList.SelectedIndex + 1;
+            }
+        }
+
+        private void btnPreview_Click(object sender, EventArgs e)
+        {
+            if (TrackList.SelectedIndex > 0)
+            {
+                TrackList.SelectedIndex = TrackList.SelectedIndex - 1;
+            }
+        }
+
+        private void P_Bar_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (Player.playState == WMPLib.WMPPlayState.wmppsPlaying)
+            {
+                P_Bar.Maximum = (int)Player.Ctlcontrols.currentItem.duration;
+                P_Bar.Value = (int)Player.Ctlcontrols.currentPosition;
+            }
+            try
+            {
+
+                lblTrack_Start.Text = Player.Ctlcontrols.currentPositionString;
+                lbl_TrackEnd.Text = Player.Ctlcontrols.currentItem.durationString.ToString();
+            }
+            catch
+            {
+                // Manejo de excepciones si es necesario
+            }
+
+            if (Player.playState == WMPLib.WMPPlayState.wmppsStopped)
+            {
+                btnNext_Click(null, null);
+            }
+        }
+
+        private void track_Volume_Scroll(object sender, EventArgs e)
+        {
+            Player.settings.volume = track_Volume.Value;
+            lblVolu.Text = track_Volume.Value.ToString() + "%";
+        }
+
+        private void lblVolu_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void P_Bar_MouseDown(object sender, MouseEventArgs e)
+        {
+            Player.Ctlcontrols.currentPosition = Player.currentMedia.duration * e.X / P_Bar.Width;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnOpen_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Multiselect = true;
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                string[] newFiles = ofd.FileNames;
+                foreach (var file in newFiles)
+                {
+                    string songName = System.IO.Path.GetFileNameWithoutExtension(file); // Usar el nombre del archivo sin extensión como clave
+                    if (!songDictionary.ContainsKey(songName))
+                    {
+                        songDictionary.Add(songName, file);
+                        TrackList.Items.Add(songName);
+                    }
+                    else
+                    {
+                        MessageBox.Show($"La canción '{songName}' ya está en la lista.", "Duplicado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                }
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            try {
+                // Detener la reproducción si hay una canción reproduciéndose
+                if (Player.playState == WMPLib.WMPPlayState.wmppsPlaying)
+                {
+                    Player.Ctlcontrols.stop();
+                }
+
+                // Eliminar la canción de la lista de reproducción y del diccionario
+                string selectedSongName = TrackList.SelectedItem.ToString();
+                if (songDictionary.ContainsKey(selectedSongName))
+                {
+                    string selectedSongPath = songDictionary[selectedSongName];
+                    songDictionary.Remove(selectedSongName);
+                    TrackList.Items.Remove(selectedSongName);
+
+                    // Si la canción que se eliminó está en la cola de reproducción, la quitamos de la cola
+                    if (songQueue.Contains(selectedSongPath))
+                    {
+                        Queue<string> tempQueue = new Queue<string>();
+                        while (songQueue.Count > 0)
+                        {
+                            string songPath = songQueue.Dequeue();
+                            if (songPath != selectedSongPath)
+                            {
+                                tempQueue.Enqueue(songPath);
+                            }
+                        }
+                        songQueue = tempQueue;
+                    }
+                }
+            }
+            catch (Exception )
+            {
+                MessageBox.Show($"borrado exitoso, dele en acceptar para continuar😈", "✨🎉borrado exitoso🎉✨", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+
+        private void btnAddToQueue_Click(object sender, EventArgs e)
+        {
+            string selectedSongName = TrackList.SelectedItem.ToString();
+            if (songDictionary.ContainsKey(selectedSongName))
+            {
+                string selectedSongPath = songDictionary[selectedSongName];
+                songQueue.Enqueue(selectedSongPath);
+                MessageBox.Show($"Añadido a la cola: {selectedSongName}");
+            }
+            else
+            {
+                MessageBox.Show("Por favor, selecciona una canción para añadir a la cola.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void aleatorio_Click(object sender, EventArgs e)
+        {
+            if (songDictionary.Count == 0)
+            {
+                MessageBox.Show("No hay canciones para reproducir aleatoriamente.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Detener la reproducción si hay una canción reproduciéndose
+            if (Player.playState == WMPLib.WMPPlayState.wmppsPlaying)
+            {
+                Player.Ctlcontrols.stop();
+            }
+
+            // Obtener las rutas de las canciones
+            List<string> songPaths = songDictionary.Values.ToList();
+
+            // Mezclar las rutas de las canciones
+            List<string> shuffledSongs = ShuffleList(songPaths);
+
+            // Limpiar la cola de reproducción actual
+            songQueue.Clear();
+
+            // Agregar las canciones mezcladas a la cola de reproducción
+            foreach (string song in shuffledSongs)
+            {
+                songQueue.Enqueue(song);
+            }
+
+            // Reproducir la primera canción en la cola aleatoria
+            if (songQueue.Count > 0)
+            {
+                PlaySong(songQueue.Dequeue());
+            }
+
+            List<string> ShuffleList(List<string> list)
+            {
+                Random rng = new Random();
+                int n = list.Count;
+                while (n > 1)
+                {
+                    n--;
+                    int k = rng.Next(n + 1);
+                    string value = list[k];
+                    list[k] = list[n];
+                    list[n] = value;
+                }
+                return list;
+            }
+
+        }
+
+        private void textobusqueda_TextChanged(object sender, EventArgs e)
+        {
+
+            try
+            {
+                string terminoBusqueda = textobusqueda.Text.Trim();
+
+                if (string.IsNullOrWhiteSpace(terminoBusqueda))
+                {
+                    // Si el término de búsqueda está vacío, mostrar todas las canciones
+                    MostrarTodasLasCanciones();
+                    return;
+                }
+
+                // Filtrar las canciones basadas en el término de búsqueda
+                List<string> cancionesFiltradas = songDictionary.Keys
+                    .Where(c => c.ToLower().Contains(terminoBusqueda.ToLower()))
+                    .ToList();
+
+                // Actualizar la lista de canciones mostradas en el reproductor
+                MostrarCancionesEnReproductor(cancionesFiltradas);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error en la búsqueda: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        private void busca_Click(object sender, EventArgs e)
+        {
+            try {
+                string terminoBusqueda = textobusqueda.Text.Trim();
+
+                if (string.IsNullOrWhiteSpace(terminoBusqueda))
+                {
+                    // Si el término de búsqueda está vacío, mostrar todas las canciones
+                    MostrarTodasLasCanciones();
+                    return;
+                }
+                if (songDictionary == null || songDictionary.Keys == null)
+                {
+                    MessageBox.Show("No hay canciones disponibles para buscar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Filtrar las canciones basadas en el término de búsqueda
+                List<string> cancionesFiltradas = songDictionary.Keys
+                    .Where(c => c.ToLower().Contains(terminoBusqueda.ToLower()))
+                    .ToList();
+
+                // Actualizar la lista de canciones mostradas en el reproductor
+                MostrarCancionesEnReproductor(cancionesFiltradas);
+            }catch (Exception)
+            {
+                MessageBox.Show($"borrado exitoso, dele en acceptar para continuar😈", "✨🎉borrado exitoso🎉✨", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            }
+
+            // Actualizar la lista de canciones mostradas en el reproductor
+            private void MostrarTodasLasCanciones()
+            {
+                // Mostrar todas las canciones en el reproductor
+                List<string> todasLasCanciones = new List<string>(songDictionary.Keys);
+                MostrarCancionesEnReproductor(todasLasCanciones);
+            }
+            private void MostrarCancionesEnReproductor(List<string> canciones)
+            {
+                TrackList.Items.Clear();
+                foreach (var song in canciones)
+                {
+                    TrackList.Items.Add(song);
+                }
+            }
+        
+
+        }
+    }

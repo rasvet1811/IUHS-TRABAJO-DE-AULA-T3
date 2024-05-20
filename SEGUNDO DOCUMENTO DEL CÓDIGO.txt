@@ -1,0 +1,78 @@
+*TEMAS QUE SE ENCONTRARAN EN EL CÓDIGO*
+
+Para entender un poco a que se deben los temas, nosotros decidimos crear un MP3, el cual cuenta con las funciones normales de un reproductor de música pero además de eso decidimos agregarle vídeos los cuales, se podían reproducir con total tranquilidad y como si fuera música normal, el nombre de este proyecto es: MILAGROS.
+
+-Los temas los cuales implementamos en el código son: Colas, Hasmap y listas, escogimos estos temas porque fueron los más sencillos para nuestro manejo e implementación para el reproductor de música, pues bien, para poder agregar el resto de los temas debíamos de ser muy específicos y además de eso al intentar utilizar todos los temas tuvimos algunas complicaciones, tuvimos una referencia la cual no logramos seguir pero nos dio una idea la cual fue del siguiente link: https://github.com/egoo16/ReproductorMP3, además de eso, decidimos preguntarle a la inteligencia artificial la implementación de cada uno de los temas y en los que más vimos posibilidad y que no se repetía los mismos procedimientos fueron esos.  
+
+*COLAS DONDE ENCONTRARLAS*
+-Declaración e inicialización se encuentran en el: public form1, al igual que el del Hasmap
+-Agregar canción a la cola en: private void btnAddToQueue_Click
+-reproducción de la siguiente canción en la cola: private void btnNext_Click
+-Limpiar la cola y ponerla en canciones mezcladas: private void aleatorio_Click
+
+*HASMAP DONDE ENCONTRARLO*
+-Su declaración es:private Dictionary<string, string> songDictionary;
+-Agregar canciones al diccionario:private void btnOpen_Click
+-Buscar y reproducir canciones desde el diccionario: private void TrackList_SelectedIndexChanged
+-Eliminar canción del diccionario y la lista común: private void button1_Click
+
+*LISTAS DONDE ENCONTRARLAS*
+-Su declaración es: private List<string> paths;
+private List<string> files;
+-Almacenar rutas y nombre de las canciones: private void btnOpen_Click
+-Tener los valores del diccionario para pasara a ser listas y mezcalarlas:private void aleatorio_Click
+
+*ORDEN DE MAGNITUD EN EL CÓDIGO:*
+-Form1 - O(1)
+-TrackList_SelectedIndexChanged - O(1)
+-PlaySong - O(1)
+-btnStop_Click - O(1)
+-btnPause_Click - O(1)
+-bntPlay_Click - O(1)
+-btnNext_Click - O(1)
+-btnPreview_Click - O(1)
+-timer1_Tick - O(1)
+-track_Volume_Scroll - O(1)
+-P_Bar_MouseDown - O(1)
+-Form1_Load - O(1)
+-btnOpen_Click - O(n)
+-button1_Click - O(n)
+-btnAddToQueue_Click - O(1)
+-aleatorio_Click - O(n)
+-ShuffleList - O(n^2) 
+
+*FUNCIÓN CÓDIGO*
+El código puede: Adelantar y retroceder, eliminar, agregar, buscar, pausar, reproducir, pasar y devolver canciones, no permite agregar canciones repetidas, regulación de volumen, muestra vídeos si tiene videos descargados en su pc y sonido si cuenta con canciones en el pc.
+
+*EL DIAGRAMA*
+Como parte inicial tenemos el forms1, luego de eso hay un bloque que se le llama Inicializar Componentes que representa la inicialización de las variables y la interfaz del usuario, después "Cargar Canciones", "Reproducir Canciones", "Controles de Reproducción", "Cola de Reproducción", "Búsqueda de Canciones", "Reproducción Aleatoria" y "Controles Adicionales (ajustar el volumen y eliminar canciones)".
+
+inserto un diagrama textual: 
+
++---------------+
+|     Form1     |
++---------------+
+       |
+       |
++------v-------+
+|  Inicializar |
+|  Componentes |
++-------+------+
+        |
+        |
++-------v-------+      +---------------+      +---------------+
+|   Cargar      |      |  Reproducir   |      |   Controles   |
+|   Canciones   |      |   Canciones   |      |  Reproducción |
++-------+-------+      +-------+-------+      +-------+-------+
+        |                      |                       |
+        |                      |                       |
++-------v-------+      +-------v-------+       +------v------+
+|     Cola      |      |   Búsqueda    |       | Reproducción|
+| de Reproducción|      |  de Canciones |       |  Aleatoria  |
++----------------+      +---------------+       +-------------+
+        |
+        |
++-------v-------+
+|    Controles  |
+|   Adicionales |
++----------------+
